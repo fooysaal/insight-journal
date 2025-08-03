@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -44,11 +45,13 @@ export function JournalEntryForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      text: '',
       mood: MOODS[1], // Default to Happy
       activities: {
         steps: undefined,
         screenTime: undefined,
       },
+      weather: '',
     },
   });
 
@@ -130,7 +133,10 @@ export function JournalEntryForm() {
                         className="resize-none pr-10"
                         rows={8}
                         {...field}
-                        onBlur={(e) => handleTextChange(e.target.value)}
+                        onBlur={(e) => {
+                          field.onBlur();
+                          handleTextChange(e.target.value);
+                        }}
                       />
                     </FormControl>
                     <Button
@@ -174,7 +180,7 @@ export function JournalEntryForm() {
                     <FormItem>
                       <FormLabel>Steps Walked</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="e.g., 8000" {...field} />
+                        <Input type="number" placeholder="e.g., 8000" {...field} value={field.value ?? ''} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -187,7 +193,7 @@ export function JournalEntryForm() {
                     <FormItem>
                       <FormLabel>Screen Time (minutes)</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="e.g., 240" {...field} />
+                        <Input type="number" placeholder="e.g., 240" {...field} value={field.value ?? ''} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
